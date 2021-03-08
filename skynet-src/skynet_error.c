@@ -30,7 +30,7 @@ skynet_error(struct skynet_context * context, const char *msg, ...) {
 	va_end(ap);
 	if (len >=0 && len < LOG_MESSAGE_SIZE) {
 		data = skynet_strdup(tmp);
-	} else if (len >= LOG_MESSAGE_SIZE) {
+	} else {
 		int max_size = LOG_MESSAGE_SIZE;
 		for (;;) {
 			max_size *= 2;
@@ -43,11 +43,9 @@ skynet_error(struct skynet_context * context, const char *msg, ...) {
 			}
 			skynet_free(data);
 		}
-		if (len < 0) {
-			skynet_free(data);
-		}
 	}
 	if (len < 0) {
+		skynet_free(data);
 		perror("vsnprintf error :");
 		return;
 	}
